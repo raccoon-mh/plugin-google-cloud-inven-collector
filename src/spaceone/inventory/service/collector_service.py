@@ -99,9 +99,11 @@ class CollectorService(BaseService):
         start_time = time.time()
 
         _LOGGER.debug("EXECUTOR START: Google Cloud Service")
-        _LOGGER.debug(
-            f"HTTPS_PROXY: {os.environ.get('HTTPS_PROXY') or os.environ.get('https_proxy')}"
-        )  # src/spaceone/inventory/libs/connector.py _create_http_client
+        proxy_env = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
+        if proxy_env:
+            _LOGGER.debug(
+                f"** Using proxy in environment variable HTTPS_PROXY/https_proxy: {proxy_env}"
+            )  # src/spaceone/inventory/libs/connector.py _create_http_client
         # Get target manager to collect
         try:
             self.execute_managers = self._get_target_execute_manager(
